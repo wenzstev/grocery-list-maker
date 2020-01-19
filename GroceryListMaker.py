@@ -15,9 +15,18 @@ if 'grocery_list' in grocery_list_shelf:  # if this not the first time we've ope
 else:
     print("creating new grocery list")
     grocery_list = {}
+    grocery_list_shelf['grocery_list'] = grocery_list
+
+if 'recipes' in grocery_list_shelf:
+    recipe_list = grocery_list_shelf['recipes']
+    print('found a recipe list')
+else:
+    recipe_list = []
+    grocery_list_shelf['recipes'] = recipe_list
 
 
 def parse_recipe(url):
+
     # TODO: capture url webpage and open
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'lxml')
@@ -52,6 +61,10 @@ def parse_recipe(url):
 
     grocery_list_shelf['grocery_list'] = grocery_list  # save updated list to file
 
+    recipe_list.append(url)
+    grocery_list_shelf['recipes'] = recipe_list # save the recipe to file
+
+    print(grocery_list_shelf['recipes'])
 
 def clear_list():
     if 'grocery_list' in grocery_list_shelf:
@@ -71,6 +84,18 @@ def print_list():
         grocery_string += k + "\n"
 
     print(grocery_string)
+    return grocery_string
+
+def export_list():
+    with open('grocery_list.txt', 'w') as exported_list:
+        exported_list.write('Grocery List \n')
+        exported_list.write('---------------\n')
+
+        exported_list.write(print_list())
+
+        exported_list.write("\n These ingredients came from these recipes: \n")
+        for recipe in grocery_list_shelf['recipes']:
+            exported_list.write(recipe + '\n')
 
 
 if len(sys.argv) < 2:
@@ -82,5 +107,7 @@ elif sys.argv[1] == 'clear':
     clear_list()
 elif sys.argv[1] == 'print':
     print_list()
+elif sys.argv[1] == 'export':
+    export_list()
 else:
     recipes_to_add = sys.argv[1:]
