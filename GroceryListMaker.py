@@ -70,6 +70,9 @@ def clear_list():
     if 'grocery_list' in grocery_list_shelf:
         grocery_list_shelf['grocery_list'] = {}
         print("cleared the grocery list")
+    if 'recipes' in grocery_list_shelf:
+        grocery_list_shelf['recipes'] = []
+        print("cleared the recipe list")
 
 
 def print_list():
