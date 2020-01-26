@@ -101,5 +101,5 @@ if __name__ == '__main__':
     pp = pprint.PrettyPrinter()
     pp.pprint(training_set)
 
-    with open('annotated_data.py', 'w') as annotated_file:
+    with open('annotated_data_old.py', 'w') as annotated_file:
         annotated_file.write(pp.pformat(training_set))

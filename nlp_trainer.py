@@ -6,7 +6,10 @@ from pathlib import Path
 import spacy
 from spacy.util import minibatch, compounding
 
+import pprint
+
 from first_dataset import ingredient_dataset
+from combined_data import combined_data
 
 TRAIN_DATA = [
     ('1 1/2 cups sugar', {"entities": [(0, 10, "QUANTITY")]}),
@@ -17,8 +20,20 @@ TRAIN_DATA = [
     ('2 1/2 pounds veal stew meat, cut into 2x1-inch pieces', {"entities": [(0, 12, "QUANTITY")]}),
     ('4 tablespoons olive oil', {"entities": [(0, 13, "QUANTITY")]}),
     ('1 1/2 cups chopped onion', {"entities": [(0, 10, "QUANTITY")]}),
-    ('1 1/2 tablespoons chopped garlic', {"entities": [(0, 17, "QUANTITY")]})
+    ('1 1/2 tablespoons chopped garlic', {"entities": [(0, 17, "QUANTITY")]}),
+    ('12 egg whites', {"entities": [(0, 2, "CARDINAL")]}),
+    ('12 egg yolks', {"entities": [(0, 2, "CARDINAL")]}),
+    ('Garnish: ground nutmeg', {"entities": []}),
+    ('18 fresh chestnuts', {"entities": [(0, 2, "CARDINAL")]}),
+    ('1 bay leaf', {"entities": [(0, 1, "CARDINAL")]}),
+    ('6 medium carrots, peeled, cut into 1-inch pieces', {"entities": [(0, 1, "CARDINAL"), (35, 48, "QUANTITY")]}),
+    ('4 or 5 slices brioche, or good quality white bread (I like Pepperidge Farm), 1/4 inch thick, crusts removed',
+     {"entities": [(0, 13, "QUANTITY"), (77, 85, "QUANTITY")]}),
+    ('3 extra-large eggs', {"entities": [(0, 1, "CARDINAL")]}),
+    ('2 extra-large egg yolks', {"entities": [(0, 1, "CARDINAL")]})
 ]
+
+TRAIN_DATA = combined_data[:20]
 
 
 @plac.annotations(
@@ -45,9 +60,9 @@ def main(model=None, output_dir=None, n_iter=100):
         ner = nlp.get_pipe("ner")
 
     # add labels
-    for _, annotations in TRAIN_DATA:
-        for ent in annotations.get("entities"):
-            ner.add_label(ent[2])
+    #    for _, annotations in TRAIN_DATA:
+    #        for ent in annotations.get("entities"):
+    #            ner.add_label(ent[2])
 
     # get names of other pipes to disable them during training
     pipe_exceptions = ["ner", "trf_wordpiercer", "trf_tok2vec"]
@@ -68,7 +83,7 @@ def main(model=None, output_dir=None, n_iter=100):
                     texts,  # batch of texts
                     annotations,  # batch of annotations
                     drop=0.5,  # dropout - make it harder to memorize data
-                    losses=losses,
+                    losses=losses
                 )
             print("Losses: {}".format(losses))
 
@@ -95,11 +110,23 @@ def main(model=None, output_dir=None, n_iter=100):
             print("Tokens", [(t.text, t.ent_type_, t.ent_iob) for t in doc])
 
 
-if __name__ == "__main__":
-    nlp = spacy.load("test_model")
+def generate_training_data(spacy_model, place_to_save):
+    nlp = spacy.load(spacy_model)
+    AUTO_TRAIN_DATA = []
 
     for line in ingredient_dataset:
         doc = nlp(line)
+        AUTO_TRAIN_DATA.append((line, {"entities": [(ent.start_char, ent.end_char, ent.label_) for ent in doc.ents]}))
 
-        print("Entities", [(ent.text, ent.label_) for ent in doc.ents])
-        print("Tokens", [(t.text, t.ent_type_, t.ent_iob) for t in doc])
+    with open(place_to_save, 'a') as annotated_data:
+        pp = pprint.PrettyPrinter()
+        annotated_data.write(pp.pformat(AUTO_TRAIN_DATA))
+
+
+if __name__ == "__main__":
+    nlp = spacy.load("test_auto_training")
+
+    for line in ingredient_dataset:
+        doc = nlp(line)
+        print(line, [(ent.text, ent.label_) for ent in doc.ents])
+
