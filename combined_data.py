@@ -134,3 +134,13 @@ combined_data = [('12 egg whites', {'entities': [(0, 2, 'CARDINAL')]}),
                  ('1/2 teaspoon ground cinnamon', {'entities': [(0, 12, 'QUANTITY')]}),
                  ('1/2 teaspoon baking soda', {'entities': [(0, 12, 'QUANTITY')]}),
                  ('1/4 teaspoon salt', {'entities': [(0, 12, 'QUANTITY')]})]
+
+new_annotated_data = [('1 cup flour, sifted', {'entities': [(6, 11, 'INGREDIENT')]}),
+ ('1 teaspoons sea salt', {'entities': [(12, 20, 'INGREDIENT')]}),
+ ('1 egg', {'entities': [(2, 5, 'INGREDIENT')]}),
+ ('1/2 cup milk', {'entities': [(8, 12, 'INGREDIENT')]}),
+ ('1 rounded tablespoon baking powder', {'entities': [(21, 34, 'INGREDIENT')]}),
+ ('2 tablespoons olive oil', {'entities': [(14, 23, 'INGREDIENT')]}),
+ ('3 cups lightly toasted sesame seeds',
+  {'entities': [(23, 35, 'INGREDIENT')]}),
+ ('1 (8 oz) package ground beef', {'entities': [(17, 28, 'INGREDIENT')]})]
