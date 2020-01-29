@@ -1,5 +1,7 @@
 import plac, re, pprint
-from combined_data import combined_data
+from combined_data import annotated_for_testing_with_INGREDIENT
+from second_dataset import ingredient_dataset
+
 
 test_recipe_text = ["1 cup flour, sifted",
                     "1 teaspoons sea salt",
@@ -9,6 +11,7 @@ test_recipe_text = ["1 cup flour, sifted",
                     "2 tablespoons olive oil",
                     "3 cups lightly toasted sesame seeds",
                     "1 (8 oz) package ground beef"]
+
 
 def main(training_set, entity_type):
     complete_training_data = []
@@ -26,7 +29,6 @@ def main(training_set, entity_type):
         while not found_entities:  # repeat the function until all matches are found
             found_entities = entity_search(raw_text)
 
-
         # TODO: if so, record the input as the entity and move to the next example
         annotated_entity_list = []
         if not isinstance(found_entities, bool):
@@ -37,6 +39,7 @@ def main(training_set, entity_type):
         complete_training_data.append((raw_text, {"entities": annotated_entity_list}))
 
     return complete_training_data
+
 
 # helper function to search the line for inputted entities
 def entity_search(line):
@@ -68,8 +71,8 @@ def entity_search(line):
 
 
 if __name__ == "__main__":
-    new_annotated_data = main(test_recipe_text, "INGREDIENT")
+    new_annotated_data = main(annotated_for_testing_with_INGREDIENT, "CARDINAL")
 
     with open('combined_data.py', 'a') as data_file:
         pp = pprint.PrettyPrinter()
-        data_file.write("new_annotated_data = " + pp.pformat(new_annotated_data))
+        data_file.write("annotated_for_testing_with_all = " + pp.pformat(new_annotated_data))

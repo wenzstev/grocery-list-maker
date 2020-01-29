@@ -272,26 +272,27 @@ train_set_measurement_model = [('12 egg whites', {'entities': [(0, 2, 'CARDINAL'
                                ('1/2 teaspoon baking soda', {'entities': [(0, 12, 'QUANTITY')]}),
                                ('1/4 teaspoon salt', {'entities': [(0, 12, 'QUANTITY')]})]
 
-mapped = zip(train_set_base_model, train_set_measurement_model)
+if __name__ == "__main__":
+    mapped = zip(train_set_base_model, train_set_measurement_model)
 
-train_set_final_model = []
+    train_set_final_model = []
 
-for pair in mapped:
-    print(pair)
-    recipe_line = pair[0][0]
-    print(pair[0][1], pair[1][1])
-    new_entity_dict = {"entities": pair[1][1]["entities"]}
+    for pair in mapped:
+        print(pair)
+        recipe_line = pair[0][0]
+        print(pair[0][1], pair[1][1])
+        new_entity_dict = {"entities": pair[1][1]["entities"]}
 
-    do_not_copy = ["CARDINAL", "QUANTITY"]
-    for entity, annotation_list in pair[0][1].items(): # loop through the original model's list
-        for annotation in annotation_list:
-            if annotation[2] not in do_not_copy:
-                print(annotation)
-                new_entity_dict["entities"].append(annotation)
+        do_not_copy = ["CARDINAL", "QUANTITY"]
+        for entity, annotation_list in pair[0][1].items(): # loop through the original model's list
+            for annotation in annotation_list:
+                if annotation[2] not in do_not_copy:
+                    print(annotation)
+                    new_entity_dict["entities"].append(annotation)
 
-    train_set_final_model.append((recipe_line, new_entity_dict))
+        train_set_final_model.append((recipe_line, new_entity_dict))
 
-with open('combined_data.py', 'w') as combined_data:
-    pp = pprint.PrettyPrinter()
-    combined_data.write(pp.pformat(train_set_final_model))
+    with open('combined_data.py', 'w') as combined_data:
+        pp = pprint.PrettyPrinter()
+        combined_data.write(pp.pformat(train_set_final_model))
 
