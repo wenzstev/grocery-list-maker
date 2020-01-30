@@ -9,7 +9,6 @@ from spacy.util import minibatch, compounding
 import pprint
 
 from first_dataset import ingredient_dataset
-from combined_data import new_annotated_data
 
 TRAIN_DATA = [
     ('1 1/2 cups sugar', {"entities": [(0, 10, "QUANTITY")]}),

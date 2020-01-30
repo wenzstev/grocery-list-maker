@@ -1,7 +1,7 @@
 
 import spacy
 
-from combined_data import annotated_for_testing_with_all, new_annotated_data
+from old_version.combined_data_old_annotations import annotated_for_testing_with_all
 
 test_model = spacy.load('ingredient_test')
 

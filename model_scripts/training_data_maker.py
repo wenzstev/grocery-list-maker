@@ -1,7 +1,5 @@
-import plac, re, pprint
-from combined_data import annotated_for_testing_with_INGREDIENT
-from second_dataset import ingredient_dataset
-
+import re, pprint
+from old_version.combined_data_old_annotations import annotated_for_testing_with_INGREDIENT
 
 test_recipe_text = ["1 cup flour, sifted",
                     "1 teaspoons sea salt",
@@ -73,6 +71,6 @@ def entity_search(line):
 if __name__ == "__main__":
     new_annotated_data = main(annotated_for_testing_with_INGREDIENT, "CARDINAL")
 
-    with open('combined_data.py', 'a') as data_file:
+    with open('combined_data_old_annotations.py', 'a') as data_file:
         pp = pprint.PrettyPrinter()
         data_file.write("annotated_for_testing_with_all = " + pp.pformat(new_annotated_data))

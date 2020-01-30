@@ -6,7 +6,7 @@ from pathlib import Path
 import spacy
 from spacy.util import minibatch, compounding
 
-from combined_data import new_annotated_data
+from old_version.combined_data_old_annotations import new_annotated_data
 
 LABEL = "INGREDIENT"
 

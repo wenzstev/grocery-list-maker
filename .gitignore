@@ -1,11 +1,13 @@
 .idea
 __pycache__
-grocery_list_data.dir
 Lib
 Screenshots
-grocery_list_data.bak
-pyvenv.cfg
 Scripts
-grocery_list_data.dat
 Include
+old_version
+jupyter_files
+pyvenv.cfg
+grocery_list_data.bak
+grocery_list_data.dat
+grocery_list_data.dir
 
