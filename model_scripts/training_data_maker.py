@@ -1,23 +1,29 @@
-import re, pprint
-from old_version.combined_data_old_annotations import annotated_for_testing_with_INGREDIENT
+import re, pprint, plac, os
+from pathlib import Path
 
-test_recipe_text = ["1 cup flour, sifted",
-                    "1 teaspoons sea salt",
-                    "1 egg",
-                    "1/2 cup milk",
-                    "1 rounded tablespoon baking powder",
-                    "2 tablespoons olive oil",
-                    "3 cups lightly toasted sesame seeds",
-                    "1 (8 oz) package ground beef"]
+@plac.annotations(
+    training_file=("The filename containing the text you wish to annotate", "option", "tf", Path),
+    entity_type=("The name of the entity you wish to annotate", "option", "e", str)
+)
+def main(training_file=None, entity_type=None):
+    """Script to more easily annotate spaCy NER training examples"""
+
+    if not training_file:
+        training_file = input("Please enter the filename of the data you wish to annotate: ")
+        # TODO: check the extension to determine what sort of file was entered
 
 
-def main(training_set, entity_type):
+        with open(training_file, 'r') as training_file:
+            list_to_annotate = training_file.readline()
+
+        print(list_to_annotate)
+
     complete_training_data = []
     # check if the training set is already formatted properly
-    is_formatted = isinstance(training_set[0], tuple)  # TODO: more rigorous checks for alternate data types
+    is_formatted = isinstance(training_file[0], tuple)  # TODO: more rigorous checks for alternate data types
 
     # TODO: loop through all lines in the training set
-    for line in training_set:
+    for line in list_to_annotate:
         if is_formatted:
             raw_text = line[0]
         else:
@@ -69,8 +75,4 @@ def entity_search(line):
 
 
 if __name__ == "__main__":
-    new_annotated_data = main(annotated_for_testing_with_INGREDIENT, "CARDINAL")
-
-    with open('combined_data_old_annotations.py', 'a') as data_file:
-        pp = pprint.PrettyPrinter()
-        data_file.write("annotated_for_testing_with_all = " + pp.pformat(new_annotated_data))
+    plac.call(main)
